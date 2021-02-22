@@ -58,6 +58,10 @@ class Rain (private val dirtField: DirtField, width: Int, height: Int): Picture(
             }
         }
     }
+
+    fun toggle() {
+        mode = if (mode == Mode.NOT_RAINING) Mode.RAINING else Mode.NOT_RAINING
+    }
 }
 
 private class RainControl: AbstractControl() {

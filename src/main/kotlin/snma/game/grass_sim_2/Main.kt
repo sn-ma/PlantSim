@@ -1,6 +1,9 @@
 package snma.game.grass_sim_2
 
 import com.jme3.app.SimpleApplication
+import com.jme3.input.KeyInput
+import com.jme3.input.controls.ActionListener
+import com.jme3.input.controls.KeyTrigger
 import com.jme3.light.AmbientLight
 import com.jme3.light.DirectionalLight
 import com.jme3.math.ColorRGBA
@@ -13,6 +16,8 @@ fun main() {
 }
 
 class App: SimpleApplication() {
+    lateinit var rain: Rain
+
     override fun simpleInitApp() {
         AssetStorage.INSTANCE = AssetStorage(assetManager)
 
@@ -20,6 +25,25 @@ class App: SimpleApplication() {
         cam.location = Vector3f(-10f, 6f, 10f)
         cam.lookAt(Vector3f(0f, 0f, 0f), Vector3f.UNIT_Y)
 
+        createAllTheStuff()
+
+        setupLightAndShadows()
+
+        inputManager.addMapping("ToggleRain", KeyTrigger(KeyInput.KEY_SPACE))
+        inputManager.addListener(object : ActionListener {
+            override fun onAction(name: String, isPressed: Boolean, tpf: Float) {
+                when (name) {
+                    "ToggleRain" -> {
+                        if (isPressed) {
+                            rain.toggle()
+                        }
+                    }
+                }
+            }
+        }, "ToggleRain")
+    }
+
+    private fun createAllTheStuff() {
         val dirtField = DirtField(30, 30, 0.5f)
         dirtField.shadowMode = RenderQueue.ShadowMode.Receive
         rootNode.attachChild(dirtField)
@@ -58,9 +82,8 @@ class App: SimpleApplication() {
         rootNode.attachChild(Seed(plantParams2, Vector3f(), dirtField).also { it.setLocalTranslation(5f, 6f, 5f) })
         rootNode.attachChild(Seed(plantParams2, Vector3f(), dirtField).also { it.setLocalTranslation(4f, 6f, 4f) })
 
-        guiNode.attachChild(Rain(dirtField, cam.width, cam.height))
-
-        setupLightAndShadows()
+        rain = Rain(dirtField, cam.width, cam.height)
+        guiNode.attachChild(rain)
     }
 
     private fun setupLightAndShadows() {
