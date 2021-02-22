@@ -19,13 +19,16 @@ class AssetStorage(
 //    val plantMaterial = toShadableTexture(ColorRGBA.Green)
 //    val deadMaterial = toShadableTexture(ColorRGBA.Black)
 
-    val dirtColors = listOf(
-        ColorRGBA(1f, .86f, .31f, 1f), // yellow
-        ColorRGBA(.82f, .69f, .19f, 1f),
-        ColorRGBA(.58f, .42f, .07f, 1f),
-        ColorRGBA(.36f, .20f, .02f, 1f),
-        ColorRGBA(.23f, .11f, .00f, 1f), // dark brown
-    )
+    val dirtColors: List<ColorRGBA>
+    init {
+        dirtColors = mutableListOf()
+        val minColor = ColorRGBA(1f, .95f, .53f, 1f) // yellow
+        val maxColor = ColorRGBA(.17f, .11f, .04f, 1f) // dark brown
+        for (i in 0 until Constants.Dirt.COLORS_COUNT) {
+            val factor = i.toFloat() / Constants.Dirt.COLORS_COUNT
+            dirtColors.add(minColor.mult(1f - factor).addLocal(maxColor.mult(factor)))
+        }
+    }
 
     private fun loadScene(filename: String): Node {
         val key = ModelKey(filename)
