@@ -36,7 +36,7 @@ class App: SimpleApplication() {
             childrenCount = 3,
             childrenVelocity = 2f..6f,
         )
-        rootNode.attachChild(Seed(plantParams, Vector3f(), dirtField).also { it.setLocalTranslation(0f, 6f, 0f) })
+        rootNode.attachChild(Seed(plantParams, Vector3f(), dirtField).also { it.setLocalTranslation(7f, 6f, 7f) })
 
         guiNode.attachChild(Rain(dirtField, cam.width, cam.height))
 

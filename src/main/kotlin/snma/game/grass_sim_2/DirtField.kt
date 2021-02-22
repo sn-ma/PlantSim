@@ -1,11 +1,15 @@
 package snma.game.grass_sim_2
 
-import com.jme3.math.FastMath
+import com.jme3.material.Material
+import com.jme3.math.ColorRGBA
 import com.jme3.math.Vector3f
 import com.jme3.scene.Geometry
-import com.jme3.scene.Mesh
-import com.jme3.scene.Node
 import com.jme3.scene.shape.Box
+import com.jme3.texture.Image
+import com.jme3.texture.Texture2D
+import com.jme3.texture.image.ColorSpace
+import com.jme3.texture.image.ImageRaster
+import com.jme3.util.BufferUtils
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -13,40 +17,56 @@ class DirtField(
     width: Int,
     height: Int,
     private val step: Float,
-) : Node("DirtField") {
-    val boxes: List<DirtBox>
+) : Geometry("DirtField", Box(width * step / 2f, 0f, height * step / 2f)) {
+    val waterLevelAccessors: List<WaterLevelAccessor>
 
     init {
-        boxes = mutableListOf()
+        waterLevelAccessors = mutableListOf()
+
+        val format = Image.Format.RGBA8
+        val buffer = BufferUtils.createByteBuffer((format.bitsPerPixel / 8f * width * height).toInt())
+        val image = Image(format, width, height, buffer, ColorSpace.Linear)
+        val raster = ImageRaster.create(image)
+
         for (i in 0 until width) {
             for (j in 0 until height) {
-                val box = DirtBox("Dirt$i.$j", Box(step / 2f, 0.1f, step / 2f)) // FIXME optimize: replace with simple square polygon
-                box.setLocalTranslation((i - (width - 1) / 2f) * step, -0.1f, (j - (height - 1) / 2f) * step)
-                box.waterLevel = 0.5f
-//                box.waterLevel = FastMath.nextRandomFloat()
-                attachChild(box)
-                boxes.add(box)
+                waterLevelAccessors.add(WaterLevelAccessor(
+                    {color -> raster.setPixel(i, j, color)},
+                    Vector3f((i - (width - 1) / 2f) * step, 0f, (j - (height - 1) / 2f) * step)))
             }
         }
+        waterLevelAccessors.forEach { it.waterLevel = 0.5f }
+
+        val texture = Texture2D(image)
+
+        val material = Material(AssetStorage.INSTANCE.assetManager, "Common/MatDefs/Light/Lighting.j3md").also { material ->
+            material.setTexture("DiffuseMap", texture)
+            material.setColor("Diffuse", ColorRGBA.White)
+            material.setColor("Ambient", ColorRGBA.White)
+            material.setBoolean("UseMaterialColors", true)
+        }
+        setMaterial(material)
     }
 
-    fun findByPos(pos: Vector3f): DirtBox? {
-        val box = boxes.minByOrNull { it.localTranslation.distanceSquared(pos) } ?: return null
-        val boxPos = box.localTranslation
-        val maxCoordinateDiff = max(abs(boxPos.x - pos.x), abs(boxPos.z - pos.z))
+    fun findByPos(pos: Vector3f): WaterLevelAccessor? {
+        val accessor = waterLevelAccessors.minByOrNull { it.centerPos.distanceSquared(pos) } ?: return null
+        val maxCoordinateDiff = max(abs(accessor.centerPos.x - pos.x), abs(accessor.centerPos.z - pos.z))
         return if (maxCoordinateDiff <= step / 1.999f) {
-            box
+            accessor
         } else {
             null
         }
     }
 }
 
-class DirtBox(name: String, mesh: Mesh) : Geometry(name, mesh) {
+class WaterLevelAccessor(
+    private val pixelSetter: (ColorRGBA) -> Unit,
+    val centerPos: Vector3f,
+) {
     var waterLevel: Float = Float.NaN
         set(value) {
             assert(value in 0f..1f)
             field = value
-            material = AssetStorage.INSTANCE.dirtMaterialByWaterLevel(value)
+            pixelSetter(AssetStorage.INSTANCE.dirtColorByWaterLevel(value))
         }
 }

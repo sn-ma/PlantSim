@@ -5,13 +5,12 @@ import com.jme3.math.FastMath
 import com.jme3.math.Vector3f
 import com.jme3.renderer.RenderManager
 import com.jme3.renderer.ViewPort
-import com.jme3.scene.Geometry
 import com.jme3.scene.control.AbstractControl
 
 class PlantControl(
     private val params: PlantParams,
     private val dirtField: DirtField,
-    private val dirtBox: DirtBox,
+    private val dirtBox: WaterLevelAccessor,
 ): AbstractControl() {
     private var scale = 1f
 

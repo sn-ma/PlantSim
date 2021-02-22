@@ -28,23 +28,23 @@ class Seed(
         })
     }
 
-    private var dirtBox: DirtBox? = null
+    private var waterLevelAccessor: WaterLevelAccessor? = null
 
     private fun update(tpf: Float) {
-        if (dirtBox == null) {
+        if (waterLevelAccessor == null) {
             val pos = localTranslation
             pos.addLocal(velocity.mult(tpf))
             velocity.addLocal(0f, -Constants.GRAVITY * tpf, 0f)
             if (pos.y <= 0f) {
                 pos.y = 0f
-                dirtBox = dirtField.findByPos(pos)
-                if (dirtBox == null) {
+                waterLevelAccessor = dirtField.findByPos(pos)
+                if (waterLevelAccessor == null) {
                     destroy()
                 }
             }
             localTranslation = pos
         } else {
-            val dirtBox = dirtBox!!
+            val dirtBox = waterLevelAccessor!!
             if (dirtBox.waterLevel > params.waterLevelToGrow && FastMath.nextRandomFloat() < params.seedGrowProb * tpf) {
                 grow()
             } else if (FastMath.nextRandomFloat() < params.seedDeathProb * tpf) {
@@ -61,7 +61,7 @@ class Seed(
         val plantModel = params.plantModel.clone()
         plantModel.localTranslation = localTranslation
         plantModel.rotate(0f, FastMath.nextRandomFloat() * FastMath.TWO_PI, 0f)
-        plantModel.addControl(PlantControl(params, dirtField, dirtBox!!))
+        plantModel.addControl(PlantControl(params, dirtField, waterLevelAccessor!!))
         parent.attachChild(plantModel)
 
         destroy()

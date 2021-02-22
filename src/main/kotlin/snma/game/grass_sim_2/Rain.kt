@@ -25,7 +25,7 @@ class Rain (private val dirtField: DirtField, width: Int, height: Int): Picture(
 
     init {
         val format = Image.Format.RGBA8
-        val buffer = BufferUtils.createByteBuffer((format.bitsPerPixel / 8f * width * height).toInt())
+        val buffer = BufferUtils.createByteBuffer((format.bitsPerPixel / 8f * 1f * 1f).toInt())
         val image = Image(format, 1, 1, buffer, ColorSpace.Linear)
         val raster = ImageRaster.create(image)
         val color = ColorRGBA(0.3f, 0.5f, 1f, 0.3f)
@@ -49,7 +49,8 @@ class Rain (private val dirtField: DirtField, width: Int, height: Int): Picture(
                 }
             }
             Mode.RAINING -> {
-                dirtField.boxes.forEach { it.waterLevel = (it.waterLevel + Constants.Rain.WATER_INC * tpf).coerceAtMost(1f) }
+                dirtField.waterLevelAccessors.forEach { it.waterLevel = (it.waterLevel + Constants.Rain.WATER_INC * tpf)
+                    .coerceAtMost(1f) }
 
                 if (FastMath.nextRandomFloat() < Constants.Rain.STOP_PROB * tpf) {
                     mode = Mode.NOT_RAINING
