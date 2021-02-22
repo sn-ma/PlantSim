@@ -11,6 +11,8 @@ class PlantParams(
     val plantModel: Spatial,
     val requiresWaterPerSecond: Float,
     val scaleIncrement: Float,
+    val reserveIncrement: Float,
+    val maxReservePerSize: Float,
     val splitSize: Float,
     val childrenCount: Int,
     val childrenVelocity: ClosedFloatingPointRange<Float>,
