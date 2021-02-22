@@ -28,15 +28,15 @@ class App: SimpleApplication() {
             seedMaterial = AssetStorage.INSTANCE.seedMaterial,
             waterLevelToGrow = 0.1f,
             seedGrowProb = 0.5f,
-            seedDeathProb = 0.01f,
+            seedDeathProb = 0.1f,
             plantModel = AssetStorage.INSTANCE.grass1,
             requiresWaterPerSecond = 0.03f,
             scaleIncrement = 0.9f,
             splitSize = 5f,
             childrenCount = 3,
-            childrenVelocity = 2f..6f,
+            childrenVelocity = 1f..5f,
         )
-        rootNode.attachChild(Seed(plantParams, Vector3f(), dirtField).also { it.setLocalTranslation(-7f, 6f, -7f) })
+        rootNode.attachChild(Seed(plantParams, Vector3f(), dirtField).also { it.setLocalTranslation(-5f, 6f, -5f) })
 
         guiNode.attachChild(Rain(dirtField, cam.width, cam.height))
 

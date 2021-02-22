@@ -46,6 +46,7 @@ class Seed(
         } else {
             val dirtBox = waterLevelAccessor!!
             if (dirtBox.waterLevel > params.waterLevelToGrow && FastMath.nextRandomFloat() < params.seedGrowProb * tpf) {
+                dirtBox.waterLevel -= params.waterLevelToGrow
                 grow()
             } else if (FastMath.nextRandomFloat() < params.seedDeathProb * tpf) {
                 destroy()
