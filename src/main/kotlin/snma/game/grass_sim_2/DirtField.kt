@@ -2,9 +2,10 @@ package snma.game.grass_sim_2
 
 import com.jme3.material.Material
 import com.jme3.math.ColorRGBA
+import com.jme3.math.FastMath
 import com.jme3.math.Vector3f
 import com.jme3.scene.Geometry
-import com.jme3.scene.shape.Box
+import com.jme3.scene.shape.Quad
 import com.jme3.texture.Image
 import com.jme3.texture.Texture2D
 import com.jme3.texture.image.ColorSpace
@@ -17,7 +18,7 @@ class DirtField(
     width: Int,
     height: Int,
     private val step: Float,
-) : Geometry("DirtField", Box(width * step / 2f, 0f, height * step / 2f)) {
+) : Geometry("DirtField") {
     val waterLevelAccessors: List<WaterLevelAccessor>
 
     init {
@@ -31,7 +32,7 @@ class DirtField(
         for (i in 0 until width) {
             for (j in 0 until height) {
                 waterLevelAccessors.add(WaterLevelAccessor(
-                    {color -> raster.setPixel(i, j, color)},
+                    {color -> raster.setPixel(j, i, color)},
                     Vector3f((i - (width - 1) / 2f) * step, 0f, (j - (height - 1) / 2f) * step)))
             }
         }
@@ -46,6 +47,10 @@ class DirtField(
             material.setBoolean("UseMaterialColors", true)
         }
         setMaterial(material)
+
+        mesh = Quad(width * step, height * step)
+        rotate(-FastMath.HALF_PI, -FastMath.HALF_PI, 0f)
+        setLocalTranslation(width * step / -2f, 0f, height * step / -2f)
     }
 
     fun findByPos(pos: Vector3f): WaterLevelAccessor? {

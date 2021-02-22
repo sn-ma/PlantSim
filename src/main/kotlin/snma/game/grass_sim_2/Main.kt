@@ -17,7 +17,7 @@ class App: SimpleApplication() {
         AssetStorage.INSTANCE = AssetStorage(assetManager)
 
         flyByCamera.moveSpeed = 15f
-        cam.location = Vector3f(10f, 6f, -10f)
+        cam.location = Vector3f(-10f, 6f, 10f)
         cam.lookAt(Vector3f(0f, 0f, 0f), Vector3f.UNIT_Y)
 
         val dirtField = DirtField(30, 30, 0.5f)
@@ -36,7 +36,7 @@ class App: SimpleApplication() {
             childrenCount = 3,
             childrenVelocity = 2f..6f,
         )
-        rootNode.attachChild(Seed(plantParams, Vector3f(), dirtField).also { it.setLocalTranslation(7f, 6f, 7f) })
+        rootNode.attachChild(Seed(plantParams, Vector3f(), dirtField).also { it.setLocalTranslation(-7f, 6f, -7f) })
 
         guiNode.attachChild(Rain(dirtField, cam.width, cam.height))
 
