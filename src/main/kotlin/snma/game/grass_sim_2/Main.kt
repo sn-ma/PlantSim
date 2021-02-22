@@ -24,19 +24,35 @@ class App: SimpleApplication() {
         dirtField.shadowMode = RenderQueue.ShadowMode.Receive
         rootNode.attachChild(dirtField)
 
-        val plantParams = PlantParams(
-            seedMaterial = AssetStorage.INSTANCE.seedMaterial,
+        val plantParams1 = PlantParams(
+            seedMaterial = AssetStorage.INSTANCE.seedMaterial1,
             waterLevelToGrow = 0.1f,
             seedGrowProb = 0.5f,
             seedDeathProb = 0.1f,
             plantModel = AssetStorage.INSTANCE.grass1,
-            requiresWaterPerSecond = 0.03f,
+            requiresWaterPerSecond = 0.05f,
             scaleIncrement = 0.9f,
             splitSize = 5f,
             childrenCount = 3,
             childrenVelocity = 1f..5f,
         )
-        rootNode.attachChild(Seed(plantParams, Vector3f(), dirtField).also { it.setLocalTranslation(-5f, 6f, -5f) })
+        rootNode.attachChild(Seed(plantParams1, Vector3f(), dirtField).also { it.setLocalTranslation(-5f, 6f, -5f) })
+        rootNode.attachChild(Seed(plantParams1, Vector3f(), dirtField).also { it.setLocalTranslation(-4f, 6f, -4f) })
+
+        val plantParams2 = PlantParams(
+            seedMaterial = AssetStorage.INSTANCE.seedMaterial2,
+            waterLevelToGrow = 0.2f,
+            seedGrowProb = 0.5f,
+            seedDeathProb = 0.05f,
+            plantModel = AssetStorage.INSTANCE.grass2,
+            requiresWaterPerSecond = 0.001f,
+            scaleIncrement = 0.15f,
+            splitSize = 10f,
+            childrenCount = 8,
+            childrenVelocity = 3f..9f,
+        )
+        rootNode.attachChild(Seed(plantParams2, Vector3f(), dirtField).also { it.setLocalTranslation(5f, 6f, 5f) })
+        rootNode.attachChild(Seed(plantParams2, Vector3f(), dirtField).also { it.setLocalTranslation(4f, 6f, 4f) })
 
         guiNode.attachChild(Rain(dirtField, cam.width, cam.height))
 

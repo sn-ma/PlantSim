@@ -15,9 +15,8 @@ class AssetStorage(
     val grass1: Spatial = prepareModel(grassScene, "Grass1", 0.1f)
     val grass2: Spatial = prepareModel(grassScene, "Grass2", 0.1f)
 
-    val seedMaterial = toShadableTexture(ColorRGBA.Red)
-//    val plantMaterial = toShadableTexture(ColorRGBA.Green)
-//    val deadMaterial = toShadableTexture(ColorRGBA.Black)
+    val seedMaterial1 = toShadableTexture(ColorRGBA.Red)
+    val seedMaterial2 = toShadableTexture(ColorRGBA(.67f, 0f, 1f, 1f))
 
     val dirtColors: List<ColorRGBA>
     init {
