@@ -26,7 +26,7 @@ class PlantControl(
             }
         }
         scale += params.scaleIncrement * tpf
-        var toReserve = min(dirtBox.waterLevel, params.reserveIncrement * tpf)
+        var toReserve = min(dirtBox.waterLevel - toGrowth, params.reserveIncrement * tpf)
         if (toReserve + reserve > params.maxReservePerSize * scale) {
             toReserve = params.maxReservePerSize * scale - reserve
         }
