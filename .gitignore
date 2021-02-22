@@ -1,0 +1,4 @@
+*.so
+.idea
+target
+grass_sim_2.iml
