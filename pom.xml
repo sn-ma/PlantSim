@@ -52,14 +52,9 @@
         </dependency>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
-            <artifactId>jme3-lwjgl</artifactId>
+            <artifactId>jme3-lwjgl3</artifactId>
             <version>${jme.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.jmonkeyengine</groupId>-->
-        <!--            <artifactId>jme3-networking</artifactId>-->
-        <!--            <version>${jme.version}</version>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-bullet-native</artifactId>
